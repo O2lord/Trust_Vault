@@ -1,0 +1,7 @@
+use anchor_lang::prelude::*;
+
+pub const RESERVATION_STATUS_PENDING: u8 = 0;
+pub const RESERVATION_STATUS_PAYMENT_SENT: u8 = 1;
+pub const RESERVATION_STATUS_COMPLETED: u8 = 2;
+pub const RESERVATION_STATUS_CANCELLED: u8 = 3;
+pub const RESERVATION_STATUS_DISPUTED: u8 = 4;
