@@ -1,0 +1,218 @@
+@import "tailwindcss";
+
+/* ============================================================
+   TRUST VAULT — Design System
+   
+   Background: #F5F0E8 warm cream — consistent across all pages
+   Cards:      #FFFFFF white — float above the cream
+   Panels:     #EDE8DF slightly darker cream — section boxes
+   Text:       #0F0D0A near-black
+   Accent:     #E8480A orange — primary CTA only
+   ============================================================ */
+
+:root {
+  --background:          #F5F0E8;
+  --foreground:          #0F0D0A;
+
+  --card:                #FFFFFF;
+  --card-foreground:     #0F0D0A;
+
+  --popover:             #FFFFFF;
+  --popover-foreground:  #0F0D0A;
+
+  --primary:             #E8480A;
+  --primary-foreground:  #FFFFFF;
+
+  --secondary:           #EDE8DF;
+  --secondary-foreground:#0F0D0A;
+
+  --muted:               #EDE8DF;
+  --muted-foreground:    rgba(15, 13, 10, 0.50);
+
+  --accent:              #E8480A;
+  --accent-foreground:   #FFFFFF;
+
+  --destructive:         #C0392B;
+  --destructive-foreground: #FFFFFF;
+
+  --border:              rgba(15, 13, 10, 0.12);
+  --input:               rgba(15, 13, 10, 0.12);
+  --ring:                #E8480A;
+  --radius:              0.5rem;
+
+  --card-bg:             #FFFFFF;
+  --card-border:         rgba(15, 13, 10, 0.12);
+  --stats-card-bg:       #FFFFFF;
+  --stats-card-border:   rgba(15, 13, 10, 0.12);
+  --panel-bg:            #EDE8DF;
+  --panel-border:        rgba(15, 13, 10, 0.08);
+  --button-secondary-bg:    #EDE8DF;
+  --button-secondary-hover: #E2DAC8;
+  --progress-bg:            #EDE8DF;
+  --text-muted:             rgba(15, 13, 10, 0.50);
+}
+
+/* ── Force light theme even if .dark class sneaks in ──────────
+   This prevents any cached localStorage theme or system
+   preference from turning the app brown/dark.
+   ─────────────────────────────────────────────────────────── */
+.dark {
+  --background:          #F5F0E8;
+  --foreground:          #0F0D0A;
+  --card:                #FFFFFF;
+  --card-foreground:     #0F0D0A;
+  --popover:             #FFFFFF;
+  --popover-foreground:  #0F0D0A;
+  --primary:             #E8480A;
+  --primary-foreground:  #FFFFFF;
+  --secondary:           #EDE8DF;
+  --secondary-foreground:#0F0D0A;
+  --muted:               #EDE8DF;
+  --muted-foreground:    rgba(15, 13, 10, 0.50);
+  --accent:              #E8480A;
+  --accent-foreground:   #FFFFFF;
+  --destructive:         #C0392B;
+  --destructive-foreground: #FFFFFF;
+  --border:              rgba(15, 13, 10, 0.12);
+  --input:               rgba(15, 13, 10, 0.12);
+  --ring:                #E8480A;
+  --card-bg:             #FFFFFF;
+  --card-border:         rgba(15, 13, 10, 0.12);
+  --stats-card-bg:       #FFFFFF;
+  --stats-card-border:   rgba(15, 13, 10, 0.12);
+  --panel-bg:            #EDE8DF;
+  --panel-border:        rgba(15, 13, 10, 0.08);
+  --button-secondary-bg:    #EDE8DF;
+  --button-secondary-hover: #E2DAC8;
+  --progress-bg:            #EDE8DF;
+  --text-muted:             rgba(15, 13, 10, 0.50);
+}
+
+/* ── Ignore system dark preference entirely ────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background:          #F5F0E8;
+    --foreground:          #0F0D0A;
+    --card:                #FFFFFF;
+    --card-foreground:     #0F0D0A;
+    --popover:             #FFFFFF;
+    --popover-foreground:  #0F0D0A;
+    --primary:             #E8480A;
+    --primary-foreground:  #FFFFFF;
+    --secondary:           #EDE8DF;
+    --secondary-foreground:#0F0D0A;
+    --muted:               #EDE8DF;
+    --muted-foreground:    rgba(15, 13, 10, 0.50);
+    --accent:              #E8480A;
+    --accent-foreground:   #FFFFFF;
+    --destructive:         #C0392B;
+    --destructive-foreground: #FFFFFF;
+    --border:              rgba(15, 13, 10, 0.12);
+    --input:               rgba(15, 13, 10, 0.12);
+    --ring:                #E8480A;
+    --card-bg:             #FFFFFF;
+    --card-border:         rgba(15, 13, 10, 0.12);
+    --stats-card-bg:       #FFFFFF;
+    --stats-card-border:   rgba(15, 13, 10, 0.12);
+    --panel-bg:            #EDE8DF;
+    --panel-border:        rgba(15, 13, 10, 0.08);
+    --button-secondary-bg:    #EDE8DF;
+    --button-secondary-hover: #E2DAC8;
+    --progress-bg:            #EDE8DF;
+    --text-muted:             rgba(15, 13, 10, 0.50);
+  }
+}
+
+/* ── Tailwind v4 theme bridge ──────────────────────────────── */
+@theme inline {
+  --color-background:           var(--background);
+  --color-foreground:           var(--foreground);
+  --color-card:                 var(--card);
+  --color-card-foreground:      var(--card-foreground);
+  --color-popover:              var(--popover);
+  --color-popover-foreground:   var(--popover-foreground);
+  --color-primary:              var(--primary);
+  --color-primary-foreground:   var(--primary-foreground);
+  --color-secondary:            var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted:                var(--muted);
+  --color-muted-foreground:     var(--muted-foreground);
+  --color-accent:               var(--accent);
+  --color-accent-foreground:    var(--accent-foreground);
+  --color-destructive:          var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border:               var(--border);
+  --color-input:                var(--input);
+  --color-ring:                 var(--ring);
+  --radius:                     var(--radius);
+  --font-sans:                  var(--font-geist-sans);
+  --font-mono:                  var(--font-geist-mono);
+}
+
+/* ── Radix UI hidden fix for Tailwind v4 ───────────────────── */
+/* Radix hides inactive tab content via [hidden] — Tailwind v4 needs this explicitly */
+[hidden] { display: none !important; }
+
+/* ── Base ───────────────────────────────────────────────────── */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  border-color: var(--border);
+}
+
+/* ── Component utility classes ──────────────────────────────── */
+@layer components {
+  .app-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    color: var(--card-foreground);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+    transition: box-shadow 0.2s ease-in-out;
+  }
+
+  .app-card:hover {
+    box-shadow: 0 4px 8px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+  }
+
+  .stats-card {
+    background: var(--stats-card-bg);
+    border: 1px solid var(--stats-card-border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    color: var(--card-foreground);
+  }
+
+  .panel {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+  }
+
+  .progress-bar-bg { background: var(--progress-bg); }
+  .text-muted      { color: var(--text-muted); }
+
+  .btn-secondary {
+    background: var(--button-secondary-bg);
+    border: 1px solid var(--border);
+    color: var(--secondary-foreground);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    transition: background-color 0.2s ease;
+  }
+  .btn-secondary:hover { background: var(--button-secondary-hover); }
+
+  .btn-primary {
+    background: var(--primary);
+    color: var(--primary-foreground);
+    border: 1px solid var(--primary);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    transition: opacity 0.2s ease;
+  }
+  .btn-primary:hover { opacity: 0.9; }
+}
