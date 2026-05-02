@@ -1,0 +1,3423 @@
+{
+  "address": "EungWtkwfbapeEkuBrD4fdMNrcey2E1UdFvw8AugWodb",
+  "metadata": {
+    "name": "trust_vault",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "buy_order_payment_sent",
+      "discriminator": [
+        242,
+        176,
+        200,
+        118,
+        232,
+        229,
+        229,
+        209
+      ],
+      "accounts": [
+        {
+          "name": "buyer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "seller"
+        },
+        {
+          "name": "trust_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  117,
+                  115,
+                  116,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.maker",
+                "account": "TrustVault"
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.seed",
+                "account": "TrustVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "reservation_index",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "cancel_or_reduce_buy_order",
+      "discriminator": [
+        212,
+        68,
+        226,
+        170,
+        186,
+        51,
+        83,
+        18
+      ],
+      "accounts": [
+        {
+          "name": "buyer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "trust_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  117,
+                  115,
+                  116,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.maker",
+                "account": "TrustVault"
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.seed",
+                "account": "TrustVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "new_amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "cancel_reservation",
+      "discriminator": [
+        72,
+        162,
+        75,
+        180,
+        116,
+        157,
+        146,
+        172
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "trust_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  117,
+                  115,
+                  116,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.maker",
+                "account": "TrustVault"
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.seed",
+                "account": "TrustVault"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "reservation_index",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "confirm_payment",
+      "discriminator": [
+        221,
+        23,
+        112,
+        126,
+        29,
+        23,
+        159,
+        223
+      ],
+      "accounts": [
+        {
+          "name": "maker",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "trust_vault"
+          ]
+        },
+        {
+          "name": "taker",
+          "writable": true
+        },
+        {
+          "name": "mint",
+          "relations": [
+            "trust_vault"
+          ]
+        },
+        {
+          "name": "fee_destination",
+          "relations": [
+            "trust_vault"
+          ]
+        },
+        {
+          "name": "fee_destination_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "fee_destination"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "trust_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  117,
+                  115,
+                  116,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maker"
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.seed",
+                "account": "TrustVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "trust_vault"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "taker_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "taker"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "global_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  108,
+                  111,
+                  98,
+                  97,
+                  108,
+                  45,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": [
+        {
+          "name": "reservation_index",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "create_buy_order",
+      "discriminator": [
+        182,
+        87,
+        0,
+        160,
+        192,
+        66,
+        151,
+        130
+      ],
+      "accounts": [
+        {
+          "name": "buyer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "trust_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  117,
+                  115,
+                  116,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "buyer"
+              },
+              {
+                "kind": "arg",
+                "path": "seed"
+              }
+            ]
+          }
+        },
+        {
+          "name": "global_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  108,
+                  111,
+                  98,
+                  97,
+                  108,
+                  45,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": [
+        {
+          "name": "seed",
+          "type": "u64"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "price_per_token",
+          "type": "u64"
+        },
+        {
+          "name": "currency",
+          "type": "string"
+        },
+        {
+          "name": "payment_instructions",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "create_sell_order",
+      "discriminator": [
+        53,
+        52,
+        255,
+        44,
+        191,
+        74,
+        171,
+        225
+      ],
+      "accounts": [
+        {
+          "name": "maker",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "maker_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "maker"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "trust_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  117,
+                  115,
+                  116,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maker"
+              },
+              {
+                "kind": "arg",
+                "path": "seed"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "trust_vault"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "fee_destination"
+        },
+        {
+          "name": "global_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  108,
+                  111,
+                  98,
+                  97,
+                  108,
+                  45,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": [
+        {
+          "name": "seed",
+          "type": "u64"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "price_per_token",
+          "type": "u64"
+        },
+        {
+          "name": "currency",
+          "type": "string"
+        },
+        {
+          "name": "payment_instructions",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "dispute_payment",
+      "discriminator": [
+        31,
+        193,
+        219,
+        54,
+        33,
+        252,
+        113,
+        100
+      ],
+      "accounts": [
+        {
+          "name": "disputer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "maker"
+        },
+        {
+          "name": "taker"
+        },
+        {
+          "name": "trust_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  117,
+                  115,
+                  116,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.maker",
+                "account": "TrustVault"
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.seed",
+                "account": "TrustVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "global_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  108,
+                  111,
+                  98,
+                  97,
+                  108,
+                  45,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "reservation_index",
+          "type": "u8"
+        },
+        {
+          "name": "dispute_reason",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "initialize_global_state",
+      "discriminator": [
+        232,
+        254,
+        209,
+        244,
+        123,
+        89,
+        154,
+        207
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "global_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  108,
+                  111,
+                  98,
+                  97,
+                  108,
+                  45,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "mark_payment_sent",
+      "discriminator": [
+        250,
+        119,
+        221,
+        215,
+        85,
+        50,
+        166,
+        109
+      ],
+      "accounts": [
+        {
+          "name": "taker",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "maker",
+          "relations": [
+            "trust_vault"
+          ]
+        },
+        {
+          "name": "trust_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  117,
+                  115,
+                  116,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.maker",
+                "account": "TrustVault"
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.seed",
+                "account": "TrustVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "reservation_index",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "reserve_buy_order",
+      "discriminator": [
+        175,
+        209,
+        34,
+        109,
+        57,
+        60,
+        232,
+        193
+      ],
+      "accounts": [
+        {
+          "name": "seller",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "buyer",
+          "writable": true
+        },
+        {
+          "name": "trust_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  117,
+                  115,
+                  116,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.maker",
+                "account": "TrustVault"
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.seed",
+                "account": "TrustVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "seller_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "seller"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "trust_vault"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "payment_instructions",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "reserve_tokens",
+      "discriminator": [
+        16,
+        166,
+        19,
+        209,
+        223,
+        151,
+        170,
+        26
+      ],
+      "accounts": [
+        {
+          "name": "taker",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "maker",
+          "writable": true,
+          "relations": [
+            "trust_vault"
+          ]
+        },
+        {
+          "name": "trust_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  117,
+                  115,
+                  116,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maker"
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.seed",
+                "account": "TrustVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint",
+          "relations": [
+            "trust_vault"
+          ]
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "trust_vault"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "taker_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "taker"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "dispute_reason",
+          "type": {
+            "option": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "resolve_disputes",
+      "discriminator": [
+        138,
+        226,
+        118,
+        243,
+        70,
+        34,
+        144,
+        193
+      ],
+      "accounts": [
+        {
+          "name": "resolver",
+          "docs": [
+            "The authority that can resolve disputes (could be program admin or arbitrator)"
+          ],
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "maker",
+          "writable": true,
+          "relations": [
+            "trust_vault"
+          ]
+        },
+        {
+          "name": "taker",
+          "writable": true
+        },
+        {
+          "name": "mint",
+          "relations": [
+            "trust_vault"
+          ]
+        },
+        {
+          "name": "trust_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  117,
+                  115,
+                  116,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maker"
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.seed",
+                "account": "TrustVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "trust_vault"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "taker_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "taker"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "maker_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "maker"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "fee_destination_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "trust_vault.fee_destination",
+                "account": "TrustVault"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "global_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  108,
+                  111,
+                  98,
+                  97,
+                  108,
+                  45,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": [
+        {
+          "name": "reservation_index",
+          "type": "u8"
+        },
+        {
+          "name": "resolution",
+          "type": "u8"
+        },
+        {
+          "name": "resolution_reason",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "seller_confirms_payment",
+      "discriminator": [
+        252,
+        114,
+        132,
+        143,
+        72,
+        238,
+        51,
+        57
+      ],
+      "accounts": [
+        {
+          "name": "seller",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "buyer",
+          "writable": true
+        },
+        {
+          "name": "mint",
+          "docs": [
+            "The mint of the token in the vault"
+          ]
+        },
+        {
+          "name": "fee_destination",
+          "relations": [
+            "trust_vault"
+          ]
+        },
+        {
+          "name": "trust_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  117,
+                  115,
+                  116,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.maker",
+                "account": "TrustVault"
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.seed",
+                "account": "TrustVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "trust_vault"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "buyer_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "buyer"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "fee_destination_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "fee_destination"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "global_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  108,
+                  111,
+                  98,
+                  97,
+                  108,
+                  45,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "reservation_index",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "update_price",
+      "discriminator": [
+        61,
+        34,
+        117,
+        155,
+        75,
+        34,
+        123,
+        208
+      ],
+      "accounts": [
+        {
+          "name": "maker",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "trust_vault"
+          ]
+        },
+        {
+          "name": "trust_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  117,
+                  115,
+                  116,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maker"
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.seed",
+                "account": "TrustVault"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "new_price_per_token",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "withdraw",
+      "discriminator": [
+        183,
+        18,
+        70,
+        156,
+        148,
+        109,
+        161,
+        34
+      ],
+      "accounts": [
+        {
+          "name": "maker",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "trust_vault"
+          ]
+        },
+        {
+          "name": "mint",
+          "relations": [
+            "trust_vault"
+          ]
+        },
+        {
+          "name": "trust_vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  117,
+                  115,
+                  116,
+                  45,
+                  118,
+                  97,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "maker"
+              },
+              {
+                "kind": "account",
+                "path": "trust_vault.seed",
+                "account": "TrustVault"
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "trust_vault"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "maker_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "maker"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": [
+        {
+          "name": "withdraw_amount",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "GlobalState",
+      "discriminator": [
+        163,
+        46,
+        74,
+        168,
+        216,
+        123,
+        133,
+        98
+      ]
+    },
+    {
+      "name": "TrustVault",
+      "discriminator": [
+        48,
+        90,
+        73,
+        80,
+        85,
+        249,
+        121,
+        214
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "BuyOrderCancelledEvent",
+      "discriminator": [
+        118,
+        145,
+        69,
+        220,
+        68,
+        112,
+        48,
+        144
+      ]
+    },
+    {
+      "name": "BuyOrderCreatedEvent",
+      "discriminator": [
+        158,
+        4,
+        42,
+        74,
+        250,
+        125,
+        66,
+        173
+      ]
+    },
+    {
+      "name": "BuyOrderReducedEvent",
+      "discriminator": [
+        250,
+        72,
+        155,
+        121,
+        173,
+        162,
+        112,
+        178
+      ]
+    },
+    {
+      "name": "BuyOrderReservedEvent",
+      "discriminator": [
+        96,
+        226,
+        145,
+        32,
+        118,
+        16,
+        55,
+        64
+      ]
+    },
+    {
+      "name": "BuyerPaymentSentEvent",
+      "discriminator": [
+        93,
+        112,
+        150,
+        57,
+        70,
+        119,
+        112,
+        207
+      ]
+    },
+    {
+      "name": "DisputeCreatedEvent",
+      "discriminator": [
+        89,
+        162,
+        48,
+        158,
+        30,
+        116,
+        145,
+        247
+      ]
+    },
+    {
+      "name": "DisputeResolvedEvent",
+      "discriminator": [
+        152,
+        37,
+        98,
+        245,
+        229,
+        39,
+        150,
+        78
+      ]
+    },
+    {
+      "name": "PartialWithdrawalEvent",
+      "discriminator": [
+        145,
+        236,
+        133,
+        111,
+        56,
+        164,
+        255,
+        176
+      ]
+    },
+    {
+      "name": "PaymentConfirmedEvent",
+      "discriminator": [
+        162,
+        217,
+        241,
+        162,
+        243,
+        91,
+        228,
+        186
+      ]
+    },
+    {
+      "name": "PaymentSentEvent",
+      "discriminator": [
+        41,
+        249,
+        146,
+        133,
+        211,
+        92,
+        159,
+        46
+      ]
+    },
+    {
+      "name": "PriceUpdatedEvent",
+      "discriminator": [
+        217,
+        171,
+        222,
+        24,
+        64,
+        152,
+        217,
+        36
+      ]
+    },
+    {
+      "name": "ReservationCancelledEvent",
+      "discriminator": [
+        202,
+        53,
+        92,
+        233,
+        242,
+        40,
+        92,
+        225
+      ]
+    },
+    {
+      "name": "SellerConfirmsPaymentEvent",
+      "discriminator": [
+        9,
+        180,
+        78,
+        60,
+        40,
+        86,
+        128,
+        104
+      ]
+    },
+    {
+      "name": "TokenReserved",
+      "discriminator": [
+        11,
+        183,
+        67,
+        38,
+        218,
+        42,
+        142,
+        149
+      ]
+    },
+    {
+      "name": "TrustVaultClosedEvent",
+      "discriminator": [
+        9,
+        42,
+        33,
+        57,
+        62,
+        220,
+        68,
+        211
+      ]
+    },
+    {
+      "name": "TrustVaultCreatedEvent",
+      "discriminator": [
+        51,
+        31,
+        254,
+        131,
+        70,
+        255,
+        70,
+        238
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "CalculationError",
+      "msg": "Calculation Error occured"
+    },
+    {
+      "code": 6001,
+      "name": "InvalidCurrency",
+      "msg": "Invalid Currency"
+    },
+    {
+      "code": 6002,
+      "name": "InvalidAmount",
+      "msg": "Invalid Amount"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidPrice",
+      "msg": "Invalid Price"
+    },
+    {
+      "code": 6004,
+      "name": "PaymentInstructionsTooLong",
+      "msg": "Payment Instructions Too Long"
+    },
+    {
+      "code": 6005,
+      "name": "InvalidPaymentInstructions",
+      "msg": "Provide a Payment Instructions"
+    },
+    {
+      "code": 6006,
+      "name": "InsufficientFunds",
+      "msg": "Insufficient Funds in Vault"
+    },
+    {
+      "code": 6007,
+      "name": "TooManyReservations",
+      "msg": "Too Many Reservations"
+    },
+    {
+      "code": 6008,
+      "name": "InsufficientTokens",
+      "msg": "Insufficient Tokens"
+    },
+    {
+      "code": 6009,
+      "name": "InvalidReservationIndex",
+      "msg": "Invalid Reservation Index"
+    },
+    {
+      "code": 6010,
+      "name": "ReservationNotPending",
+      "msg": "No pending reservation"
+    },
+    {
+      "code": 6011,
+      "name": "ActiveReservationsExist",
+      "msg": "No active reservation"
+    },
+    {
+      "code": 6012,
+      "name": "Unauthorized",
+      "msg": "Unauthorized"
+    },
+    {
+      "code": 6013,
+      "name": "InvalidTrustVaultType",
+      "msg": "Invalid trust vault type"
+    },
+    {
+      "code": 6014,
+      "name": "InvalidTaker",
+      "msg": "You are not the Taker of the reservation"
+    },
+    {
+      "code": 6015,
+      "name": "CannotReduceBelowReserved",
+      "msg": "Amount cannot be below the reserved"
+    },
+    {
+      "code": 6016,
+      "name": "InvalidMaker",
+      "msg": "Invalided maker"
+    },
+    {
+      "code": 6017,
+      "name": "CannotDisputeCompletedTransaction",
+      "msg": "cannot complete payment due to dispute"
+    },
+    {
+      "code": 6018,
+      "name": "UnauthorizedDisputer",
+      "msg": "Unauthorized, only maker or seller can raise disputes"
+    },
+    {
+      "code": 6019,
+      "name": "UnauthorizedResolver",
+      "msg": "Unauthorized, you are not an admin and cannot resolve disputes"
+    },
+    {
+      "code": 6020,
+      "name": "NotDisputed",
+      "msg": "Unauthorized, this transaction is not disputed"
+    }
+  ],
+  "types": [
+    {
+      "name": "BuyOrderCancelledEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "trust_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "buyer",
+            "type": "pubkey"
+          },
+          {
+            "name": "original_amount",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BuyOrderCreatedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "trust_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "buyer",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "price_per_token",
+            "type": "u64"
+          },
+          {
+            "name": "currency",
+            "type": "string"
+          },
+          {
+            "name": "payment_instructions",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BuyOrderReducedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "trust_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "buyer",
+            "type": "pubkey"
+          },
+          {
+            "name": "original_amount",
+            "type": "u64"
+          },
+          {
+            "name": "new_amount",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BuyOrderReservedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "trust_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "buyer",
+            "type": "pubkey"
+          },
+          {
+            "name": "seller",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "fiat_amount",
+            "type": "u64"
+          },
+          {
+            "name": "currency",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BuyerPaymentSentEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "trust_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "buyer",
+            "type": "pubkey"
+          },
+          {
+            "name": "seller",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "fiat_amount",
+            "type": "u64"
+          },
+          {
+            "name": "currency",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DisputeCreatedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "trust_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "maker",
+            "type": "pubkey"
+          },
+          {
+            "name": "taker",
+            "type": "pubkey"
+          },
+          {
+            "name": "reservation_index",
+            "type": "u8"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "fiat_amount",
+            "type": "u64"
+          },
+          {
+            "name": "currency",
+            "type": "string"
+          },
+          {
+            "name": "disputer",
+            "type": "pubkey"
+          },
+          {
+            "name": "reason",
+            "type": "string"
+          },
+          {
+            "name": "dispute_id",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DisputeResolvedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "trust_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "maker",
+            "type": "pubkey"
+          },
+          {
+            "name": "taker",
+            "type": "pubkey"
+          },
+          {
+            "name": "reservation_index",
+            "type": "u8"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "fiat_amount",
+            "type": "u64"
+          },
+          {
+            "name": "fee_amount",
+            "type": "u64"
+          },
+          {
+            "name": "transfer_amount",
+            "type": "u64"
+          },
+          {
+            "name": "currency",
+            "type": "string"
+          },
+          {
+            "name": "resolver",
+            "type": "pubkey"
+          },
+          {
+            "name": "resolution",
+            "type": "u8"
+          },
+          {
+            "name": "resolution_reason",
+            "type": "string"
+          },
+          {
+            "name": "trust_vault_type",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GlobalState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_trust_vaults_created",
+            "type": "u64"
+          },
+          {
+            "name": "total_trust_vaults_closed",
+            "type": "u64"
+          },
+          {
+            "name": "total_confirmations",
+            "type": "u64"
+          },
+          {
+            "name": "fee_percentage",
+            "type": "u16"
+          },
+          {
+            "name": "fee_destination",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_fees_collected",
+            "type": "u64"
+          },
+          {
+            "name": "total_volume",
+            "type": "u64"
+          },
+          {
+            "name": "token_decimals",
+            "type": "u8"
+          },
+          {
+            "name": "high_watermark_volume",
+            "type": "u64"
+          },
+          {
+            "name": "last_volume_update",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "total_disputes",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PartialWithdrawalEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "trust_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "maker",
+            "type": "pubkey"
+          },
+          {
+            "name": "refund_amount",
+            "type": "u64"
+          },
+          {
+            "name": "remaining_amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PaymentConfirmedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "trust_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "maker",
+            "type": "pubkey"
+          },
+          {
+            "name": "taker",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "fee_amount",
+            "type": "u64"
+          },
+          {
+            "name": "fiat_amount",
+            "type": "u64"
+          },
+          {
+            "name": "currency",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PaymentSentEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "trust_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "maker",
+            "type": "pubkey"
+          },
+          {
+            "name": "taker",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "fiat_amount",
+            "type": "u64"
+          },
+          {
+            "name": "currency",
+            "type": "string"
+          },
+          {
+            "name": "fee_amount",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PriceUpdatedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "trust_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "maker",
+            "type": "pubkey"
+          },
+          {
+            "name": "old_price",
+            "type": "u64"
+          },
+          {
+            "name": "new_price",
+            "type": "u64"
+          },
+          {
+            "name": "currency",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ReservationCancelledEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "trust_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "maker",
+            "type": "pubkey"
+          },
+          {
+            "name": "taker",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "cancelled_by",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ReservedAmount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "taker",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "fiat_amount",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "status",
+            "type": "u8"
+          },
+          {
+            "name": "seller_instructions",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "dispute_reason",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "dispute_id",
+            "type": {
+              "option": "string"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "SellerConfirmsPaymentEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "trust_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "buyer",
+            "type": "pubkey"
+          },
+          {
+            "name": "seller",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "fiat_amount",
+            "type": "u64"
+          },
+          {
+            "name": "currency",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TokenReserved",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "trust_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "taker",
+            "type": "pubkey"
+          },
+          {
+            "name": "maker",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "fiat_amount",
+            "type": "u64"
+          },
+          {
+            "name": "currency",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TrustVault",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "seed",
+            "type": "u64"
+          },
+          {
+            "name": "maker",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "currency",
+            "type": {
+              "array": [
+                "u8",
+                3
+              ]
+            }
+          },
+          {
+            "name": "trust_vault_type",
+            "type": "u8"
+          },
+          {
+            "name": "fee_percentage",
+            "type": "u16"
+          },
+          {
+            "name": "fee_destination",
+            "type": "pubkey"
+          },
+          {
+            "name": "reserved_fee",
+            "type": "u64"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "price_per_token",
+            "type": "u64"
+          },
+          {
+            "name": "payment_instructions",
+            "type": "string"
+          },
+          {
+            "name": "reserved_amounts",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "ReservedAmount"
+                }
+              }
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TrustVaultClosedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "trust_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "maker",
+            "type": "pubkey"
+          },
+          {
+            "name": "remaining_amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TrustVaultCreatedEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "trust_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "maker",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint_a",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "fee_percentage",
+            "type": "u16"
+          },
+          {
+            "name": "fee_destination",
+            "type": "pubkey"
+          },
+          {
+            "name": "price_per_token",
+            "type": "u64"
+          },
+          {
+            "name": "currency",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ],
+  "constants": [
+    {
+      "name": "SEED",
+      "type": "string",
+      "value": "\"trust_vault\""
+    }
+  ]
+}

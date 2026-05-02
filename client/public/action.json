@@ -1,0 +1,12 @@
+{
+  "rules": [
+    {
+      "pathPattern": "/reserve/**",
+      "apiPath": "/api/actions/reserve/**"
+    },
+    {
+      "pathPattern": "/api/actions/**",
+      "apiPath": "/api/actions/**"
+    }
+  ]
+}
