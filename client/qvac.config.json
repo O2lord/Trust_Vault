@@ -1,0 +1,13 @@
+{
+  "serve": {
+    "models": {
+      "trust-vault-ai": {
+        "src": "registry://s3/qvac_models_compiled/ggml/Qwen3-4B/2025-06-27/Qwen3-4B-Q4_K_M.gguf",
+        "type": "llm",
+        "default": true,
+        "preload": true,
+        "config": { "ctx_size": 8192 }
+      }
+    }
+  }
+}
