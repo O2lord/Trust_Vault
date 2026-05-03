@@ -1,0 +1,13 @@
+{
+  "serve": {
+    "models": {
+      "trust-vault-ai": {
+        "src": "/Users/o2lord/.qvac/models/qwen3-4b-q4_k_m.gguf",
+        "type": "llamacpp-completion",
+        "default": true,
+        "preload": true,
+        "config": { "ctx_size": 8192 }
+      }
+    }
+  }
+}

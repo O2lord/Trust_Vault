@@ -1,0 +1,42 @@
+{
+  "private": true,
+  "license": "ISC",
+  "type": "module",
+  "workspaces": [
+    "client",
+    "discord-bot"
+  ],
+  "scripts": {
+    "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
+    "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check",
+    "dev": "concurrently \"npm run dev --workspace=client\" \"npm run dev --workspace=discord-bot\"",
+    "dev:client": "npm run dev --workspace=client",
+    "dev:bot": "npm run dev --workspace=discord-bot"
+  },
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.31.1",
+    "@qvac/cli": "^0.2.4",
+    "@qvac/sdk": "^0.9.1",
+    "@solana-developers/helpers": "^2.8.1",
+    "@solana/spl-token": "^0.4.14",
+    "b4a": "^1.8.0",
+    "bare-rpc": "^1.3.0",
+    "concurrently": "^9.2.1",
+    "js-sha3": "^0.9.3"
+  },
+  "devDependencies": {
+    "@types/bn.js": "^5.1.0",
+    "@types/chai": "^4.3.20",
+    "@types/jest": "^30.0.0",
+    "@types/mocha": "^9.1.1",
+    "chai": "^4.3.4",
+    "mocha": "^9.0.3",
+    "prettier": "^2.6.2",
+    "ts-mocha": "^10.0.0",
+    "typescript": "^5.7.3"
+  },
+  "overrides": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
