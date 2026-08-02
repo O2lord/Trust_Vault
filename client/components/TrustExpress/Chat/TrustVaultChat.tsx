@@ -151,9 +151,10 @@ interface MessageProps {
   onDismissAction: () => void;
   streaming?: boolean;
   onPickOrder?: (order: ParsedOrder) => void;
+  onActionSuccess?: (resultMessage: string) => void;
 }
 
-function Message({ message, onDismissAction, streaming, onPickOrder }: MessageProps): JSX.Element {
+function Message({ message, onDismissAction, streaming, onPickOrder, onActionSuccess }: MessageProps): JSX.Element {
   const isUser = message.role === "user";
 
   const disambigOrders = useMemo(
@@ -184,8 +185,8 @@ function Message({ message, onDismissAction, streaming, onPickOrder }: MessagePr
             }}
           >
             <Image
-              src="/logo.png"
-              alt="Trust Vault"
+              src="/Trust_AI.png"
+              alt="Trust AI"
               width={28}
               height={28}
               style={{ objectFit: "cover" }}
@@ -217,7 +218,11 @@ function Message({ message, onDismissAction, streaming, onPickOrder }: MessagePr
 
       {!isUser && message.action && (
         <div style={{ paddingLeft: 36 }}>
-          <ActionCard action={message.action} onDismiss={onDismissAction} />
+          <ActionCard 
+          action={message.action} 
+          onDismiss={onDismissAction} 
+          onSuccess={onActionSuccess}
+          />
         </div>
       )}
 
@@ -501,7 +506,31 @@ export default function TrustVaultChat({
     [input, messages, loading, walletContext, speak]
   );
 
-  sendRef.current = send;
+sendRef.current = send;
+
+const [pendingSuccess, setPendingSuccess] = useState<string | null>(null);
+
+const handleActionSuccess = useCallback((resultMessage: string) => {
+  setPendingSuccess(`[SYSTEM: Action completed. ${resultMessage}]`);
+}, []);
+
+useEffect(() => {
+  if (!loading && pendingSuccess) {
+    setPendingSuccess(null);
+    sendRef.current?.(pendingSuccess);
+  }
+}, [loading, pendingSuccess]);
+
+useEffect(() => {
+  const handleStorage = (e: StorageEvent) => {
+    if (e.key !== "tv_qr_success" || !e.newValue) return;
+    localStorage.removeItem("tv_qr_success");
+    const { amount, currency } = JSON.parse(e.newValue) as { amount: number; currency: string };
+    setPendingSuccess(`QR payment completed: ${amount?.toLocaleString()} ${currency} received successfully.`);
+  };
+  window.addEventListener("storage", handleStorage);
+  return () => window.removeEventListener("storage", handleStorage);
+}, []);
 
   // When user taps an order card, send a message that gives the AI both the
   // order identity AND the original intent so it knows to ask for the amount next.
@@ -563,8 +592,8 @@ export default function TrustVaultChat({
           }}
         >
           <Image
-            src="/logo.png"
-            alt="Trust Vault"
+            src="/Trust_AI.png"
+            alt="Trust AI"
             width={36}
             height={36}
             style={{ objectFit: "cover" }}
@@ -624,12 +653,13 @@ export default function TrustVaultChat({
           flexDirection: "column",
         }}
       >
-        {messages.map((m, i) => (
+        {messages.filter((m) => !m.content.startsWith("[SYSTEM:")).map((m, i) => (
           <Message
             key={i}
             message={m}
             onDismissAction={() => dismissAction(i)}
             onPickOrder={m.role === "assistant" ? handlePickOrder : undefined}
+            onActionSuccess={handleActionSuccess}
           />
         ))}
 
@@ -662,8 +692,8 @@ export default function TrustVaultChat({
               }}
             >
               <Image
-                src="/logo.png"
-                alt="Trust Vault"
+                src="/Trust_AI.png"
+                alt="Trust AI"
                 width={28}
                 height={28}
                 style={{ objectFit: "cover", borderRadius: "50%" }}

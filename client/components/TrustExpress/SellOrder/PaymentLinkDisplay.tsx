@@ -18,6 +18,7 @@ interface PaymentLinkDisplayProps {
   payoutReference: string;
   transactionSignature?: string;
   trustExpressAddress: string;
+  tokenSymbol?: string;
   tokenAmount: number;
   fiatAmount: number;
   currency: string;
@@ -33,6 +34,7 @@ export const PaymentLinkDisplay: React.FC<PaymentLinkDisplayProps> = ({
   payoutReference,
   transactionSignature,
   trustExpressAddress,
+  tokenSymbol = '…',
   tokenAmount,
   fiatAmount,
   currency,
@@ -402,9 +404,6 @@ export const PaymentLinkDisplay: React.FC<PaymentLinkDisplayProps> = ({
           <p className="text-sm font-medium text-[#0F0D0A]" style={{ fontFamily: "'Syne', sans-serif" }}>
             Preparing your payment link...
           </p>
-          <p className="text-xs text-[#0F0D0A]/40 mt-1">
-            Attempt {fetchAttempts.current} — this should only take a moment
-          </p>
           {fetchAttempts.current > 5 && (
             <p className="text-[#E8480A] text-xs mt-2">Taking longer than expected... still trying</p>
           )}
@@ -527,10 +526,7 @@ export const PaymentLinkDisplay: React.FC<PaymentLinkDisplayProps> = ({
             <Loader2 className="w-4 h-4 text-[#E8480A] animate-spin flex-shrink-0" />
             <div>
               <p className="text-sm font-semibold text-[#0F0D0A]" style={{ fontFamily: "'Syne', sans-serif" }}>
-                Generating Receipt
-              </p>
-              <p className="text-xs text-[#0F0D0A]/50 mt-0.5">
-                Preparing your transaction receipt...
+                Generating Receipt...
               </p>
             </div>
           </div>
@@ -545,7 +541,7 @@ export const PaymentLinkDisplay: React.FC<PaymentLinkDisplayProps> = ({
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-[#0F0D0A]/50">Tokens</span>
-              <span className="font-semibold text-[#0F0D0A]">{tokenAmount} USDC</span>
+              <span className="font-semibold text-[#0F0D0A]">{tokenAmount} {tokenSymbol}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-[#0F0D0A]/50">You paid</span>
@@ -588,7 +584,7 @@ export const PaymentLinkDisplay: React.FC<PaymentLinkDisplayProps> = ({
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
             <span className="text-[#0F0D0A]/50">Tokens</span>
-            <span className="font-semibold text-[#0F0D0A]">{tokenAmount} USDC</span>
+            <span className="font-semibold text-[#0F0D0A]">{tokenAmount} {tokenSymbol}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-[#0F0D0A]/50">Total Cost</span>

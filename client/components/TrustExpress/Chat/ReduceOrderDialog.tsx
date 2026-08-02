@@ -26,6 +26,7 @@ interface Props {
   orderType?: "buy" | "sell";
   token?: string;
   reduceBy?: number;      // pre-filled from AI
+  onSuccess?: (msg: string) => void;  
 }
 
 const BRAND = {
@@ -44,6 +45,7 @@ export default function ReduceOrderDialog({
   orderType = "buy",
   token = "USDC",
   reduceBy,
+  onSuccess,
 }: Props): JSX.Element {
   const { publicKey } = useWallet();
   const queryClient = useQueryClient();
@@ -150,6 +152,9 @@ export default function ReduceOrderDialog({
     }
   };
 
+  const isFullClose =
+  availableBalance !== null && parseFloat(amount) >= availableBalance;
+
   // ── Submit ────────────────────────────────────────────────────────────────
   const handleSubmit = useCallback(async () => {
     if (!targetAccount || isSubmitting) return;
@@ -202,7 +207,9 @@ export default function ReduceOrderDialog({
       queryClient.invalidateQueries({
         queryKey: ["get-trust-express-accounts"],
       });
-      onOpenChange(false);
+    const msg = `order ${isFullClose ? "closed" : "reduced"}: removed ${parsed} ${token} from ${orderType} order ${orderAddress ?? ""}.`;
+    onSuccess?.(msg);
+    onOpenChange(false);
     } catch (err) {
       toast.dismiss();
       toast.error("Transaction failed. Please try again.");
@@ -221,11 +228,12 @@ export default function ReduceOrderDialog({
     getMintInfo,
     queryClient,
     onOpenChange,
+    onSuccess,
     isSubmitting,
+    isFullClose,
+    orderAddress,
   ]);
 
-  const isFullClose =
-    availableBalance !== null && parseFloat(amount) >= availableBalance;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

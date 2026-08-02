@@ -137,6 +137,7 @@ ${mintReference}
 ## ACTION DETECTION
 When the user clearly wants to perform one of these operations, append ONE <action> block at the end of your reply.
 Only emit an action for clear intent — not for general questions.
+- When you receive a [SYSTEM: Action completed...] message, NEVER emit an <action> block in your response. Only acknowledge and suggest a next step.
 
 ### Action types and examples:
 

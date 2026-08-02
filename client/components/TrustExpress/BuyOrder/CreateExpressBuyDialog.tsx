@@ -78,6 +78,7 @@ type Props = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   prefill?: OrderPrefill;
+  onSuccess?: () => void;
 };
 
 interface Credential {
@@ -87,7 +88,7 @@ interface Credential {
   is_active: boolean;
 }
 
-const CreateExpressBuyDialog: React.FC<Props> = ({ trigger, open: controlledOpen, onOpenChange, prefill }) => {
+const CreateExpressBuyDialog: React.FC<Props> = ({ trigger, open: controlledOpen, onOpenChange, prefill, onSuccess }) => {
   const queryClient = useQueryClient();
   const [internalOpen, setInternalOpen] = useState(false);
   
@@ -379,9 +380,11 @@ const CreateExpressBuyDialog: React.FC<Props> = ({ trigger, open: controlledOpen
         setTxStep(0);
         toast.success("Buy order created successfully!");
         form.reset();
+        queryClient.invalidateQueries({ queryKey: ["get-trustExpress-accounts"] });
+        queryClient.invalidateQueries({ queryKey: ["get-trust-express-accounts"] });
         queryClient.invalidateQueries({ queryKey: ["get-buy-orders"] });
+        onSuccess?.();
         setOpen(false);
-        window.location.reload();
       } catch (error) {
         setTxStep(0);
         console.error("Error creating buy order:", error);

@@ -879,6 +879,16 @@ const MerchantPage: React.FC = () => {
   }, [recoverFromSessionStorage]);
 
   useEffect(() => {
+  if (!receiptData) return;
+  if (receiptData.status !== "completed" && receiptData.status !== "success") return;
+  localStorage.setItem("tv_qr_success", JSON.stringify({
+    amount: receiptData.fiat_amount,
+    currency: receiptData.currency,
+    ts: Date.now(),
+  }));
+}, [receiptData]);
+
+  useEffect(() => {
     const handler = async (e: Event) => {
       const { receiptId: rid } = (e as CustomEvent).detail;
       if (!rid) return;

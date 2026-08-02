@@ -8,3 +8,10 @@ test-ledger
 opay-keys/
 version.ts
 .env*
+.sh
+.pem
+# Model files
+client/models/
+*.onnx
+*.onnx_data
+*.wav

@@ -113,9 +113,9 @@ function startHeartbeat(config: ValidatorConfig): void {
         headers: botHeaders(config.apiKey),
       });
       if (res.ok) {
-        console.log(`[${label}] 💓 Heartbeat sent (${res.status})`);
+       // console.log(`[${label}] 💓 Heartbeat sent (${res.status})`);
       } else {
-        console.warn(`[${label}] ⚠️  Heartbeat rejected (${res.status})`);
+       // console.warn(`[${label}] ⚠️  Heartbeat rejected (${res.status})`);
       }
     } catch (err) {
       console.warn(`[${label}] ⚠️  Heartbeat failed: ${err}`);

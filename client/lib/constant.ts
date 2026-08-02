@@ -6,10 +6,6 @@ export const NavBar_Item: NavBarItemType[] = [
         hasDropdown: true,
         children: [
           {
-            label: "Trust Vault",
-            link: "/explorer"
-          },
-          {
             label: "Trust Express",
             link: "/express"
           },
@@ -17,16 +13,16 @@ export const NavBar_Item: NavBarItemType[] = [
             label: "Requests",
             link: "/requests"
           },
+          {
+            label: "History",
+            link: "/history"
+          }
         ],
     },
     {
     label: "Lp Provider",
     hasDropdown: true,
     children: [
-      {
-        label: "Trust Vault",
-        link: "/my_vault",
-      },
        {
         label: "Trust Express",
         link: "/express/providers",

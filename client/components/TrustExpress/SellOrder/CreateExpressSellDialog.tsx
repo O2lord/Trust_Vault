@@ -73,6 +73,7 @@ type Props = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   prefill?: OrderPrefill;
+  onSuccess?: () => void;
 };
 
 interface Credential {
@@ -82,7 +83,7 @@ interface Credential {
   is_active: boolean;
 }
 
-const CreateExpressSellDialog: React.FC<Props> = ({ trigger, open: controlledOpen, onOpenChange, prefill }) => {
+const CreateExpressSellDialog: React.FC<Props> = ({ trigger, open: controlledOpen, onOpenChange, prefill, onSuccess }) => {
   const queryClient = useQueryClient();
   const [internalOpen, setInternalOpen] = useState(false);
   
@@ -374,6 +375,7 @@ const onSubmit = useCallback(
       
       form.reset();
       queryClient.invalidateQueries({ queryKey: ["get-trust-express-accounts"] });
+      onSuccess?.();
       setOpen(false);
     } catch (error) {
       console.error("Error creating sell order:", error);

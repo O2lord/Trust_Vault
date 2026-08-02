@@ -149,6 +149,7 @@ async function generateReceipt(
     const parsedPayoutDetails = {
       account_number:   rawPayoutDetails.account_number ?? rawPayoutDetails.a ?? '',
       bank_code:        rawPayoutDetails.bank_code       ?? rawPayoutDetails.b ?? '',
+      bank_name:        rawPayoutDetails.bank_name         ?? null,
       beneficiary_name: rawPayoutDetails.beneficiary_name ?? rawPayoutDetails.account_name ?? rawPayoutDetails.n ?? '',
       type:             rawPayoutDetails.type ?? 'bank_transfer',
     };
@@ -170,6 +171,9 @@ async function generateReceipt(
       fee_amount:            feeAmountBigInt.toString(),
       payout_method:         parsedPayoutDetails.type ?? 'bank_transfer',
       payout_details:        parsedPayoutDetails,
+      account_number:        parsedPayoutDetails.account_number   ?? null,
+      bank_name:             parsedPayoutDetails.bank_name         ?? null,
+      beneficiary_name:      parsedPayoutDetails.beneficiary_name  ?? null,
       flw_reference:         transferReference,
       status:                'pending',
       mint_address:          body.mint_address ?? null,

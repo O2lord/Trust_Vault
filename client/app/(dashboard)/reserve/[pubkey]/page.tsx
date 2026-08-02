@@ -670,9 +670,6 @@ export default function ReservePoolPage() {
                 <h2 className="text-2xl font-black text-[#0F0D0A]" style={{ fontFamily: "'Syne', sans-serif" }}>
                   Processing Payout…
                 </h2>
-                <p className="text-sm text-[#0F0D0A]/50 mt-1.5">
-                  Generating your receipt, this may take a moment.
-                </p>
               </div>
             </>
           )}

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "dev:client": "next dev",
     "dev": "concurrently \"next dev\" \"npm run ai\"",
     "ai": "cd ../ai && npx qvac serve openai",
     "build": "next build",

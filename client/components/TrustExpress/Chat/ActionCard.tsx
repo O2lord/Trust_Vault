@@ -15,7 +15,6 @@ const CreateExpressSellDialog = dynamic(
   () => import("@/components/TrustExpress/SellOrder/CreateExpressSellDialog"),
   { ssr: false }
 );
-// ── NEW: inline reduce dialog — no navigation needed ─────────────────────────
 const ReduceOrderDialog = dynamic(
   () => import("@/components/TrustExpress/Chat/ReduceOrderDialog"),
   { ssr: false }
@@ -42,6 +41,7 @@ export interface OrderPrefill {
 interface ActionCardProps {
   action: ChatAction;
   onDismiss: () => void;
+  onSuccess?: (resultMessage: string) => void; // ← NEW: fires after successful tx
 }
 
 const ACTION_META = {
@@ -53,7 +53,7 @@ const ACTION_META = {
   updatePrice: { icon: Tag,          label: "Update Price",   color: "#6366f1"    },
 } as const;
 
-export default function ActionCard({ action, onDismiss }: ActionCardProps): JSX.Element {
+export default function ActionCard({ action, onDismiss, onSuccess }: ActionCardProps): JSX.Element {
   const router = useRouter();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -63,13 +63,11 @@ export default function ActionCard({ action, onDismiss }: ActionCardProps): JSX.
   useEffect(() => {
     if (!meta) return;
 
-    // ── Inline dialogs (no navigation) ───────────────────────────────────────
     if (action.type === "buy" || action.type === "sell" || action.type === "reduce") {
       const t = setTimeout(() => setDialogOpen(true), 300);
       return () => clearTimeout(t);
     }
 
-    // ── Navigate-based actions ────────────────────────────────────────────────
     if (action.type === "qr") {
       const params = new URLSearchParams();
       if (action.fiatAmount) params.set("amount", String(action.fiatAmount));
@@ -110,7 +108,21 @@ export default function ActionCard({ action, onDismiss }: ActionCardProps): JSX.
     paymentType:   action.paymentType,
   };
 
-  // Summary chips — tailored per action type
+  // ── Build success message per action type ─────────────────────────────────
+  const buildSuccessMessage = (type: ChatAction["type"]): string => {
+    switch (type) {
+      case "buy":
+        return `Buy order created: ${action.amount ?? ""} ${action.token ?? "USDC"} at ${action.pricePerToken ?? ""} ${action.currency ?? "NGN"} per token.`;
+      case "sell":
+        return `Sell order created: ${action.amount ?? ""} ${action.token ?? "USDC"} deposited into escrow at ${action.pricePerToken ?? ""} ${action.currency ?? "NGN"} per token.`;
+      case "reduce":
+        return `Order reduced: removed ${action.reduceBy ?? ""} ${action.token ?? "USDC"} from ${action.orderType ?? "buy"} order ${action.orderAddress ?? ""}.`;
+      default:
+        return `${type} action completed successfully.`;
+    }
+  };
+
+  // Summary chips
   const summaryParts: string[] = [];
   if (action.token) summaryParts.push(action.token);
 
@@ -151,7 +163,6 @@ export default function ActionCard({ action, onDismiss }: ActionCardProps): JSX.
         borderRadius: 12, padding: "12px 14px", marginTop: 8,
         position: "relative", fontFamily: "'Syne', sans-serif",
       }}>
-        {/* Dismiss */}
         <button
           onClick={() => { setDismissed(true); onDismiss(); }}
           aria-label="Dismiss"
@@ -164,7 +175,6 @@ export default function ActionCard({ action, onDismiss }: ActionCardProps): JSX.
           <X size={14} />
         </button>
 
-        {/* Header */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
           <div style={{
             background: meta.color + "20", borderRadius: 8, padding: 6,
@@ -182,7 +192,6 @@ export default function ActionCard({ action, onDismiss }: ActionCardProps): JSX.
           </div>
         </div>
 
-        {/* Summary chips */}
         {summaryParts.length > 0 && (
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 10 }}>
             {summaryParts.map((part) => (
@@ -202,19 +211,24 @@ export default function ActionCard({ action, onDismiss }: ActionCardProps): JSX.
         </div>
       </div>
 
-      {/* ── Inline dialogs — rendered here, no navigation ──────────────────── */}
       {action.type === "buy" && (
         <CreateExpressBuyDialog
           open={dialogOpen}
-          onOpenChange={setDialogOpen}
+          onOpenChange={(open) => {
+            setDialogOpen(open);
+          }}
           prefill={prefill}
+          onSuccess={() => onSuccess?.(buildSuccessMessage("buy"))} // ← NEW
         />
       )}
       {action.type === "sell" && (
         <CreateExpressSellDialog
           open={dialogOpen}
-          onOpenChange={setDialogOpen}
+          onOpenChange={(open) => {
+            setDialogOpen(open);
+          }}
           prefill={prefill}
+          onSuccess={() => onSuccess?.(buildSuccessMessage("sell"))} // ← NEW
         />
       )}
       {action.type === "reduce" && (
@@ -225,6 +239,7 @@ export default function ActionCard({ action, onDismiss }: ActionCardProps): JSX.
           orderType={action.orderType ?? "buy"}
           token={action.token ?? "USDC"}
           reduceBy={action.reduceBy}
+          onSuccess={(msg) => onSuccess?.(msg)} // ← NEW
         />
       )}
     </>

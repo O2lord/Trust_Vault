@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/trust_vault.json`.
  */
 export type TrustVault = {
-  "address": "6Z8rRkDxtLWBEGgeccx8AWj9Um8osnLQihEA1xiECHWr",
+  "address": "6gHrdm5AtG8TFvMknv5ZBEt1CHpKwBEToVbEaGBL8r7M",
   "metadata": {
     "name": "trustVault",
     "version": "0.1.0",

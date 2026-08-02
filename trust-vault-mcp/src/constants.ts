@@ -2,7 +2,7 @@ import { PublicKey } from "@solana/web3.js";
 
 // Source: trust-vault-program skill, §1 Program Identity
 export const PROGRAM_ID = new PublicKey(
-  "6Z8rRkDxtLWBEGgeccx8AWj9Um8osnLQihEA1xiECHWr"
+  "6gHrdm5AtG8TFvMknv5ZBEt1CHpKwBEToVbEaGBL8r7M"
 );
 
 export const TRUST_EXPRESS_SEED = "trust-express";

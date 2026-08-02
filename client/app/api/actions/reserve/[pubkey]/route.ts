@@ -42,7 +42,7 @@ const EXPRESS_SELL = 0;
 
 const PROGRAM_ID = new PublicKey(
   process.env.TRUST_EXPRESS_PROGRAM_ID ??
-    "6Z8rRkDxtLWBEGgeccx8AWj9Um8osnLQihEA1xiECHWr"
+    "6gHrdm5AtG8TFvMknv5ZBEt1CHpKwBEToVbEaGBL8r7M"
 );
 
 const APP_URL =

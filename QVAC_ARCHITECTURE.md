@@ -3,7 +3,7 @@
 **Trust Vault** is a non-custodial P2P crypto-to-fiat settlement protocol on Solana, built for Nigeria and Sub-Saharan Africa. This document covers the QVAC AI integration specifically — how it works, how to run it, and why it's built the way it is.
 
 Live app: [trustv6ult.xyz]
-Smart contract: `6Z8rRkDxtLWBEGgeccx8AWj9Um8osnLQihEA1xiECHWr`
+Smart contract: `6gHrdm5AtG8TFvMknv5ZBEt1CHpKwBEToVbEaGBL8r7M`
 
 ## What the QVAC integration does
 

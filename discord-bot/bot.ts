@@ -2667,13 +2667,19 @@ private async startWebhookPolling(): Promise<void> {
         return;
       }
 
-      const { maker, mintA, currency: onChainCurrency } = await this.deserializeTrustExpressAccount(trustExpressAccountInfo.data);
-      const makerAddress = maker.toString();
-      event.participants.maker = makerAddress;
-      event.participants.taker = taker;
+// AFTER
+const { maker, mintA, currency: onChainCurrency } = await this.deserializeTrustExpressAccount(trustExpressAccountInfo.data);
+const makerAddress = maker.toString();
+event.participants.maker = makerAddress;
+event.participants.taker = taker;
 
-      if (success) {
-        const receiptId = await this.generateValidatorSettlementReceipt(event, makerAddress, mintA.toString(), onChainCurrency);
+const mintInfo = await this.connection.getAccountInfo(mintA);
+if (!mintInfo) throw new Error(`Could not fetch mint account for ${mintA.toString()}`);
+const mintDecimals = mintInfo.data[44];
+const scaledFiatAmount = (Number(event.data.fiatAmount) / Math.pow(10, mintDecimals)).toString();
+
+if (success) {
+  const receiptId = await this.generateValidatorSettlementReceipt(event, makerAddress, mintA.toString(), onChainCurrency, scaledFiatAmount);
         if (receiptId) {
           console.log(`✅ Receipt generated: ${receiptId}`);
           await this.updatePaymentLinkStatus(payoutReference as string, 'completed');
@@ -2718,17 +2724,23 @@ private async startWebhookPolling(): Promise<void> {
     console.log('✅ ValidatorVoteExecuted processing complete\n');
   }
 
-  private async generateValidatorSettlementReceipt(
-    event: ParsedEvent,
-    makerAddress: string,
-    mintAddress: string,
-    onChainCurrency: string
-  ): Promise<string | null> {
+  // AFTER
+private async generateValidatorSettlementReceipt(
+  event: ParsedEvent,
+  makerAddress: string,
+  mintAddress: string,
+  onChainCurrency: string,
+  scaledFiatAmount: string
+): Promise<string | null> {
     try {
       const supabaseAdmin = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.SUPABASE_SERVICE_ROLE_KEY!
       );
+
+      // Parse the original bank details from payoutDetails so they are preserved
+      // on the receipt row and visible in the receipt modal.
+      const bankDetails = parsePayoutDetails(event.data.payoutDetails as string | null);
 
       // Idempotency: don't double-insert
       // Try to update an existing pending receipt first (upsert-by-reference)
@@ -2737,17 +2749,24 @@ private async startWebhookPolling(): Promise<void> {
         .update({
           status: 'success',
           transaction_signature: event.signature,
-          payout_details: {
+          mint_address: mintAddress,
+         // account_number:   bankDetails?.account_number                                 ?? null,
+          //bank_name:        bankDetails?.bank_code                                       ?? null,
+          //beneficiary_name: bankDetails?.beneficiary_name ?? bankDetails?.account_name  ?? null,
+         payout_details: {
             settlement_type: 'validator_vote',
             message: event.data.message,
             signature: event.signature,
+            //account_number:   bankDetails?.account_number                                ?? null,
+            //bank_code:        bankDetails?.bank_code                                     ?? null,
+            //beneficiary_name: bankDetails?.beneficiary_name ?? bankDetails?.account_name ?? null,
           },
         })
-        .eq('payout_reference', event.data.payoutReference)  // ← matches directly, no prior SELECT
+        .eq('payout_reference', event.data.payoutReference)
         .select('id')
         .maybeSingle();
 
-      if (updated) return updated.id;   // ← existing row found and updated, done
+      if (updated) return updated.id;
 
       // No existing receipt — insert fresh (fallback)
       const tokenAmountBigInt = BigInt(event.data.amount || '0');
@@ -2764,14 +2783,20 @@ private async startWebhookPolling(): Promise<void> {
           taker_address: event.data.taker,
           maker_address: makerAddress,
           token_amount: tokenAmountBigInt.toString(),
-          fiat_amount: event.data.fiatAmount,
+          fiat_amount: scaledFiatAmount,
           currency: event.data.currency || onChainCurrency,
           fee_amount: feeAmountBigInt.toString(),
           payout_method: 'validator_consensus',
+          account_number:   bankDetails?.account_number                                 ?? null,
+          bank_name:        bankDetails?.bank_code                                       ?? null,
+          beneficiary_name: bankDetails?.beneficiary_name ?? bankDetails?.account_name  ?? null,
           payout_details: {
             settlement_type: 'validator_vote',
             message: event.data.message,
             signature: event.signature,
+            account_number:   bankDetails?.account_number                                ?? null,
+            bank_code:        bankDetails?.bank_code                                     ?? null,
+            beneficiary_name: bankDetails?.beneficiary_name ?? bankDetails?.account_name ?? null,
           },
           flw_reference: null,
           status: 'success',

@@ -18,7 +18,7 @@ pub use state::*;
 pub mod utils;
 pub use utils::*;
 
-declare_id!("6Z8rRkDxtLWBEGgeccx8AWj9Um8osnLQihEA1xiECHWr");
+declare_id!("6gHrdm5AtG8TFvMknv5ZBEt1CHpKwBEToVbEaGBL8r7M");
 
 #[program]
 pub mod trust_vault {

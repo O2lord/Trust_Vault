@@ -87,7 +87,7 @@ The result: trustless, non-custodial, registration-free settlement between crypt
 
 ## Program Architecture
 
-**Deployed Program ID:** `6Z8rRkDxtLWBEGgeccx8AWj9Um8osnLQihEA1xiECHWr`
+**Deployed Program ID:** `6gHrdm5AtG8TFvMknv5ZBEt1CHpKwBEToVbEaGBL8r7M`
 
 Trust Vault uses a modular Anchor architecture with separate instruction modules for buy and sell order flows, a decentralized 3-of-5 validator vote system, and a per-validator fee accumulation layer.
 
@@ -931,8 +931,8 @@ NEXT_PUBLIC_RPC_URL=https://api.devnet.solana.com
 RPC_URL=https://api.devnet.solana.com
 
 # Program
-TRUST_EXPRESS_PROGRAM_ID=6Z8rRkDxtLWBEGgeccx8AWj9Um8osnLQihEA1xiECHWr
-NEXT_PUBLIC_PROGRAM_ID=6Z8rRkDxtLWBEGgeccx8AWj9Um8osnLQihEA1xiECHWr
+TRUST_EXPRESS_PROGRAM_ID=6gHrdm5AtG8TFvMknv5ZBEt1CHpKwBEToVbEaGBL8r7M
+NEXT_PUBLIC_PROGRAM_ID=6gHrdm5AtG8TFvMknv5ZBEt1CHpKwBEToVbEaGBL8r7M
 
 # Supabase
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
@@ -978,8 +978,8 @@ NEXT_PUBLIC_SOLANA_RPC_URL=https://api.devnet.solana.com
 SOLANA_RPC_URL=https://api.devnet.solana.com
 
 # Program
-TRUST_EXPRESS_PROGRAM_ID=6Z8rRkDxtLWBEGgeccx8AWj9Um8osnLQihEA1xiECHWr
-NEXT_PUBLIC_PROGRAM_ID=6Z8rRkDxtLWBEGgeccx8AWj9Um8osnLQihEA1xiECHWr
+TRUST_EXPRESS_PROGRAM_ID=6gHrdm5AtG8TFvMknv5ZBEt1CHpKwBEToVbEaGBL8r7M
+NEXT_PUBLIC_PROGRAM_ID=6gHrdm5AtG8TFvMknv5ZBEt1CHpKwBEToVbEaGBL8r7M
 
 # Bot wallet (signs on-chain transactions)
 BOT_WALLET_PRIVATE_KEY=your_bot_wallet_base58_private_key
@@ -1005,9 +1005,9 @@ NEXT_PUBLIC_APP_URL=https://your-app-url.com
 PLATFORM_API_URL=https://your-app-url.com           # Running client/Next.js app URL
 SOLANA_RPC_URL=https://api.devnet.solana.com
 NEXT_PUBLIC_SOLANA_RPC_URL=https://api.devnet.solana.com
-PROGRAM_ID=6Z8rRkDxtLWBEGgeccx8AWj9Um8osnLQihEA1xiECHWr
-TRUST_EXPRESS_PROGRAM_ID=6Z8rRkDxtLWBEGgeccx8AWj9Um8osnLQihEA1xiECHWr
-NEXT_PUBLIC_PROGRAM_ID=6Z8rRkDxtLWBEGgeccx8AWj9Um8osnLQihEA1xiECHWr
+PROGRAM_ID=6gHrdm5AtG8TFvMknv5ZBEt1CHpKwBEToVbEaGBL8r7M
+TRUST_EXPRESS_PROGRAM_ID=6gHrdm5AtG8TFvMknv5ZBEt1CHpKwBEToVbEaGBL8r7M
+NEXT_PUBLIC_PROGRAM_ID=6gHrdm5AtG8TFvMknv5ZBEt1CHpKwBEToVbEaGBL8r7M
 
 # Validator 1
 VALIDATOR_PRIVATE_KEY1=base58_keypair_for_validator_1
@@ -1107,7 +1107,7 @@ All 5 validators start concurrently via `Promise.allSettled()`. Each registers i
 
 ---
 
-**Program ID:** `6Z8rRkDxtLWBEGgeccx8AWj9Um8osnLQihEA1xiECHWr`  
+**Program ID:** `6gHrdm5AtG8TFvMknv5ZBEt1CHpKwBEToVbEaGBL8r7M`  
 **Built with:** Rust · Anchor 0.30+ · Solana · Next.js 14 · TypeScript · Supabase  
 **Fiat Rails:** Flutterwave · Paystack · Korapay  
 **Consensus:** 5 independent validator nodes · 3-of-5 threshold · keccak_256 vote hashing

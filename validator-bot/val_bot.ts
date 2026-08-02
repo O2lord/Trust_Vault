@@ -49,7 +49,7 @@ dotenv.config({ path: '.env' });
 const PROGRAM_ID = new PublicKey(
   process.env.PROGRAM_ID ||
     process.env.TRUST_EXPRESS_PROGRAM_ID ||
-    '6Z8rRkDxtLWBEGgeccx8AWj9Um8osnLQihEA1xiECHWr'
+    '6gHrdm5AtG8TFvMknv5ZBEt1CHpKwBEToVbEaGBL8r7M'
 );
 
 const PLATFORM_API_URL = process.env.PLATFORM_API_URL!;
@@ -684,7 +684,7 @@ export class ValidatorBot {
         const decimals = mintInfo?.data[44] ?? 9; // decimals at offset 44 in mint layout
         displayAmount = (Number(event.amount) / Math.pow(10, decimals)).toFixed(2);
       } catch { /* fall back to raw */ }
-      console.log(chalk.white(`[${this.tag}]    Amount: ${displayAmount} tokens | ${event.fiatAmount.toString()} ${event.currency}`));
+      console.log(chalk.white(`[${this.tag}]    Amount: ${displayAmount} tokens | ${Number(event.fiatAmount) / 1e9} ${event.currency}`));
 
       // Both buy and sell events need maker — buy events don't include it in the
       // log so we fetch it from the chain account.
@@ -751,22 +751,30 @@ if (orderType === 'buy') {
       await submitSellVote(this.program, this.validatorKeypair, this.connection, event, vote, evidence, this.tag);
 
       if (vote) {
-        try {
-          const res = await fetch(`${PLATFORM_API_URL}/api/bot/generate-sell-receipt`, {
-            method: 'POST',
-            headers: botHeaders(this.apiKey),
-            body: JSON.stringify({
-              payout_reference:      event.payoutReference,
-              trust_express_pda:     event.trustExpress,
-              taker:                 event.taker,
-              maker:                 event.maker,
-              token_amount:          event.amount.toString(),
-              fiat_amount: event.fiatAmount.toString(),
-              currency:              event.currency,
-              transaction_signature: event.signature,
-              mint_address:          null,
-            }),
-          });
+          try {
+            const teAccount = await (this.program.account as any).trustExpress.fetch(
+              new PublicKey(event.trustExpress)
+            );
+            const mintInfo = await this.connection.getAccountInfo(teAccount.mint);
+            if (!mintInfo) throw new Error('Could not fetch mint account');
+            const mintDecimals = mintInfo.data[44];
+            const scaledFiatAmount = (Number(event.fiatAmount) / Math.pow(10, mintDecimals)).toString();
+
+            const res = await fetch(`${PLATFORM_API_URL}/api/bot/generate-sell-receipt`, {
+              method: 'POST',
+              headers: botHeaders(this.apiKey),
+              body: JSON.stringify({
+                payout_reference:      event.payoutReference,
+                trust_express_pda:     event.trustExpress,
+                taker:                 event.taker,
+                maker:                 event.maker,
+                token_amount:          event.amount.toString(),
+                fiat_amount:           scaledFiatAmount,
+                currency:              event.currency,
+                transaction_signature: event.signature,
+                mint_address:          null,
+              }),
+            });
           const data = await res.json();
           if (data.success && !data.idempotent) {
             console.log(chalk.green(`[${this.tag}] 📄 Receipt generated: ${data.receipt_id}`));
@@ -984,7 +992,7 @@ if (orderType === 'buy') {
             // ── Finalize expired votes (refund taker) ───────────────────────
             if (voteAccount.expiresAt.toNumber() > now) continue;
 
-            console.log(chalk.yellow(`[${this.tag}] ⌛ Finalizing expired vote: ${pubkey.toString()}`));
+            //console.log(chalk.yellow(`[${this.tag}] ⌛ Finalizing expired vote: ${pubkey.toString()}`));
 
             const trustExpressPubkey: PublicKey = voteAccount.trustExpress;
             const takerPubkey: PublicKey        = voteAccount.taker;

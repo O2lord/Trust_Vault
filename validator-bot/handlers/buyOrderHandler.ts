@@ -256,7 +256,9 @@ async function executePayout(
         payout_reference:  event.payoutReference,
         trust_express_pda: event.trustExpress,
         taker:             event.taker,
+        maker:             event.maker, 
         fiat_amount:       takerFiatAmount,
+        token_amount:      event.amount.toString(),
         currency:          event.currency,
         payout_details:    event.payoutDetails,
       }),
@@ -636,7 +638,7 @@ try {
   tokenDisplay = (Number(event.amount) / Math.pow(10, decimals)).toFixed(2);
 } catch { /* fall back to raw */ }
 
-console.log(chalk.white(`${tag} 💰 Fiat: ${scaledFiatAmount} ${event.currency} | Tokens: ${tokenDisplay} | Ref: ${event.payoutReference}`));
+console.log(chalk.white(`${tag} 💰 Fiat: ${Number(event.fiatAmount) / 1e9} ${event.currency} | Tokens: ${tokenDisplay} | Ref: ${event.payoutReference}`));
   // ── 1. Race to become executor (server handles the DB race) ───────────────
   const role = await electExecutor(event, apiKey, platformApiUrl, tag);
   const roleColour = role === 'executor' ? chalk.magenta : chalk.blue;
