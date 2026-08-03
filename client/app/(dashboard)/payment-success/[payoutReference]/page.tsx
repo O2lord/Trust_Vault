@@ -38,6 +38,14 @@ const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({ params }) => {
   const [retryCount, setRetryCount] = useState(0);
   const MAX_RETRIES = 3;
 
+  // Receipt lookup — resolves payoutReference -> the receipt's actual DB id
+  // via /api/receipts/by-reference/[reference]. The receipt row is created
+  // asynchronously by the validators, so this polls for a bit after success.
+  const [receiptId, setReceiptId] = useState<string | null>(null);
+  const [receiptLookup, setReceiptLookup] = useState<'idle' | 'polling' | 'found' | 'not_found'>('idle');
+  const RECEIPT_POLL_ATTEMPTS = 10;
+  const RECEIPT_POLL_INTERVAL_MS = 3000;
+
   // Extract Flutterwave parameters from URL
   const flutterwaveStatus = searchParams.get('status');
   const txRef = searchParams.get('tx_ref');
@@ -111,8 +119,58 @@ const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({ params }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Once payment is confirmed, look up the receipt row by payout reference.
+  // The row may not exist the instant we land here, so retry for a bit.
+  useEffect(() => {
+    if (status !== 'success' && status !== 'already_processed') return;
+    if (receiptId) return;
+
+    let cancelled = false;
+    let attempts = 0;
+
+    const fetchReceiptId = async (): Promise<string | null> => {
+      try {
+        const res = await fetch(`/api/receipts/by-reference/${payoutReference}`);
+        if (!res.ok) return null;
+        const data = await res.json();
+        return data?.id ?? null;
+      } catch {
+        return null;
+      }
+    };
+
+    setReceiptLookup('polling');
+
+    const poll = async () => {
+      const id = await fetchReceiptId();
+      if (cancelled) return;
+
+      if (id) {
+        setReceiptId(id);
+        setReceiptLookup('found');
+        return;
+      }
+
+      attempts += 1;
+      if (attempts >= RECEIPT_POLL_ATTEMPTS) {
+        setReceiptLookup('not_found');
+        return;
+      }
+      setTimeout(poll, RECEIPT_POLL_INTERVAL_MS);
+    };
+
+    poll();
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
+
   const handleViewReceipt = () => {
-    router.push(`/receipts/${payoutReference}`);
+    if (receiptId) {
+      router.push(`/receipts/${receiptId}`);
+    }
   };
 
   const handleViewTransaction = () => {
@@ -265,15 +323,41 @@ const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({ params }) => {
                   Try Again
                 </Button>
               )}
+
+              <Button onClick={() => router.push('/express')} variant="default" className="w-full">
+                Back to Trust Express
+              </Button>
             </div>
           )}
 
-          <div className="pt-4 border-t border-border">
-            <Button onClick={handleViewReceipt} variant="default" className="w-full">
-              <Receipt className="w-4 h-4 mr-2" />
-              View Receipt
-            </Button>
-          </div>
+          {(status === 'success' || status === 'already_processed') && (
+            <div className="pt-4 border-t border-border">
+              {receiptLookup === 'found' && (
+                <Button onClick={handleViewReceipt} variant="default" className="w-full">
+                  <Receipt className="w-4 h-4 mr-2" />
+                  View Receipt
+                </Button>
+              )}
+
+              {receiptLookup === 'polling' && (
+                <Button variant="default" className="w-full" disabled>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Preparing Receipt...
+                </Button>
+              )}
+
+              {(receiptLookup === 'idle' || receiptLookup === 'not_found') && (
+                <Button
+                  onClick={() => router.push('/receipts')}
+                  variant="outline"
+                  className="w-full"
+                >
+                  <Receipt className="w-4 h-4 mr-2" />
+                  {receiptLookup === 'not_found' ? "Can't find it yet — view all receipts" : 'View Receipts'}
+                </Button>
+              )}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
