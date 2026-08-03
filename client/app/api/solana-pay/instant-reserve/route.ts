@@ -333,6 +333,10 @@ export async function POST(req: NextRequest) {
     const fiatAmount          = searchParams.get('fiatAmount');
     const currency            = searchParams.get('currency');
     const payoutDetailsRaw    = searchParams.get('payoutDetails');
+    // reference: optional Solana Pay reference pubkey, included as a non-signer,
+    // non-writable account in the instruction so the transaction can be located
+    // on-chain by watching for this key (per the Solana Pay reference spec).
+    const referenceParam      = searchParams.get('reference');
 
     // ── Yield split params (optional) ─────────────────────────────────────
     // yieldPercent: 0-90, integer. The % of the payment to split to the merchant's
@@ -551,6 +555,7 @@ export async function POST(req: NextRequest) {
       { pubkey: tokenProgramId,              isSigner: false, isWritable: false },
       { pubkey: ASSOCIATED_TOKEN_PROGRAM_ID, isSigner: false, isWritable: false },
       { pubkey: SystemProgram.programId,     isSigner: false, isWritable: false },
+      ...(referenceParam ? [{ pubkey: new PublicKey(referenceParam), isSigner: false, isWritable: false }] : []),
     ];
 
     const reserveInstruction = new TransactionInstruction({
