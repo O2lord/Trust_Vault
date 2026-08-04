@@ -23,6 +23,19 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+// This route is auth-gated and per-validator/per-payment — never cache it.
+export const dynamic = 'force-dynamic';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Helper — attach no-store headers to every JSON response this route returns
+// ─────────────────────────────────────────────────────────────────────────────
+
+function noStoreJson(body: unknown, init?: { status?: number }): NextResponse {
+  const response = NextResponse.json(body, init);
+  response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+  return response;
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
 // ─────────────────────────────────────────────────────────────────────────────
@@ -200,7 +213,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const auth = await authenticateValidator(apiKey, botVersion);
 
     if (!auth.valid) {
-      return NextResponse.json(
+      return noStoreJson(
         { verified: false, error: auth.error ?? 'Unauthorized' },
         { status: 401 }
       );
@@ -213,7 +226,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const orderType = searchParams.get('order_type') as 'buy' | 'sell' | null;
 
     if (!payoutReference || !trustExpressPda || !orderType) {
-      return NextResponse.json(
+      return noStoreJson(
         { verified: false, error: 'Missing required params: payout_reference, trust_express_pda, order_type' },
         { status: 400 }
       );
@@ -227,7 +240,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       : await getCredentialsForSellOrder(trustExpressPda);
 
     if (!credInfo) {
-      return NextResponse.json(
+      return noStoreJson(
         { verified: false, error: `No credentials found for this ${orderType} order` },
         { status: 404 }
       );
@@ -262,10 +275,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       if (error) console.warn('⚠️ Failed to log validator verification:', error.message);
     });
 
-    return NextResponse.json(result, { status: 200 });
+    return noStoreJson(result, { status: 200 });
   } catch (error) {
     console.error('❌ verify-payment error:', error);
-    return NextResponse.json(
+    return noStoreJson(
       { verified: false, error: error instanceof Error ? error.message : 'Internal server error' },
       { status: 500 }
     );
@@ -273,5 +286,5 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 }
 
 export async function OPTIONS() {
-  return NextResponse.json({}, { status: 200 });
+  return noStoreJson({}, { status: 200 });
 }
