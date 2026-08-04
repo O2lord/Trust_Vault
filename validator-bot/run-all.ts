@@ -9,9 +9,19 @@
 // Reads from .env — expects VALIDATOR_PRIVATE_KEY1..5 and VALIDATOR_API_KEY1..5
 
 import dotenv from 'dotenv';
+import { Connection } from '@solana/web3.js';
 import { ValidatorBot, ValidatorConfig, botHeaders } from './val_bot.js';
 
 dotenv.config({ path: '.env' });
+
+// Delay between starting each validator, so all 5 don't slam the RPC
+// endpoint with simultaneous getVersion/getProgramAccounts/websocket-subscribe
+// calls at process startup.
+const STARTUP_STAGGER_MS = 400;
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Required shared env vars (needed by the bot itself, not per-validator)
@@ -145,8 +155,20 @@ async function main() {
   console.log(`   PLATFORM_API_URL : ${process.env.PLATFORM_API_URL}`);
   console.log(`   Validators loaded: ${configs.map((c) => c.label).join(', ')}\n`);
 
+  // ── Shared Connection ─────────────────────────────────────────────────────
+  // ✅ One Connection (and one websocket) shared by all 5 validators, instead
+  // of each ValidatorBot opening its own. This is what was causing 429s: each
+  // validator was independently calling getVersion, getLatestBlockhash,
+  // getProgramAccounts, and opening its own logsSubscribe websocket — 5x the
+  // request volume against api.devnet.solana.com's per-IP rate limit.
+  const rpcUrl = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || process.env.SOLANA_RPC_URL!;
+  const sharedConnection = new Connection(rpcUrl, {
+    commitment: 'confirmed',
+    wsEndpoint: rpcUrl.replace('https://', 'wss://').replace('http://', 'ws://'),
+  });
+
   // ── Start validators ─────────────────────────────────────────────────────
-  console.log(`🚀 Starting ${configs.length} validators concurrently...\n`);
+  console.log(`🚀 Starting ${configs.length} validators (staggered by ${STARTUP_STAGGER_MS}ms)...\n`);
 
   // Graceful shutdown
   const shutdown = () => {
@@ -156,15 +178,22 @@ async function main() {
   process.on('SIGINT',  shutdown);
   process.on('SIGTERM', shutdown);
 
-  // Start all bots in parallel — Promise.allSettled so one failure
-  // doesn't abort the others
-  const results = await Promise.allSettled(
-    configs.map((config) => {
-      const bot = new ValidatorBot(config);
-      startHeartbeat(config);  // fire immediately + every 60s, independent per validator
-      return bot.start();
-    })
-  );
+  // Start bots with a small stagger between each — Promise.allSettled so one
+  // failure doesn't abort the others.
+  const startPromises: Promise<void>[] = [];
+
+  for (let i = 0; i < configs.length; i++) {
+    const config = configs[i];
+    const bot = new ValidatorBot({ ...config, connection: sharedConnection });
+    startHeartbeat(config); // fire immediately + every 60s, independent per validator
+    startPromises.push(bot.start());
+
+    if (i < configs.length - 1) {
+      await sleep(STARTUP_STAGGER_MS);
+    }
+  }
+
+  const results = await Promise.allSettled(startPromises);
 
   // Report any startup failures
   results.forEach((result, i) => {

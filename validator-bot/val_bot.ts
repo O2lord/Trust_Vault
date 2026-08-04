@@ -39,6 +39,7 @@ import IDL from './relics/trust_vault.json' with { type: 'json' };
 import type { TrustVault } from './relics/trust_vault.js';
 import { handleBuyReservation } from './handlers/buyOrderHandler.js';
 import { BOT_VERSION } from './version.js';
+export { BOT_VERSION }; // re-exported: buyOrderHandler.ts imports this from val_bot.js, not version.js directly
 
 dotenv.config({ path: '.env' });
 
@@ -117,6 +118,9 @@ export interface ValidatorConfig {
   privateKey: string; // base58
   apiKey: string;
   label?: string;
+  connection?: Connection; // ✅ OPTIONAL: pass a shared Connection to avoid opening
+                            // one RPC/websocket connection per validator. If omitted,
+                            // each ValidatorBot creates its own (legacy behavior).
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -125,6 +129,47 @@ export interface ValidatorConfig {
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Shared blockhash cache
+//
+// Solana blockhashes stay valid for ~60-90 seconds. Without caching, every
+// validator calls getLatestBlockhash() independently on every vote/ATA-create,
+// multiplying RPC load by the number of validators running (5x in run-all.ts).
+// This cache is module-scoped so ALL ValidatorBot instances in the process
+// share one in-flight request and one cached result.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const BLOCKHASH_TTL_MS = 25_000; // refresh well within the ~60-90s validity window
+
+let cachedBlockhash: { blockhash: string; fetchedAt: number } | null = null;
+let blockhashFetchPromise: Promise<string> | null = null;
+
+export async function getCachedBlockhash(connection: Connection): Promise<string> {
+  const now = Date.now();
+
+  if (cachedBlockhash && now - cachedBlockhash.fetchedAt < BLOCKHASH_TTL_MS) {
+    return cachedBlockhash.blockhash;
+  }
+
+  // Coalesce concurrent callers (e.g. 5 validators voting on the same event
+  // at nearly the same time) into a single outstanding RPC request.
+  if (!blockhashFetchPromise) {
+    blockhashFetchPromise = connection
+      .getLatestBlockhash('confirmed')
+      .then(({ blockhash }) => {
+        cachedBlockhash = { blockhash, fetchedAt: Date.now() };
+        blockhashFetchPromise = null;
+        return blockhash;
+      })
+      .catch((err) => {
+        blockhashFetchPromise = null;
+        throw err;
+      });
+  }
+
+  return blockhashFetchPromise;
 }
 
 function computeReferenceHash(payoutReference: string): number[] {
@@ -583,7 +628,7 @@ async function submitSellVote(
 
   if (preIxs.length > 0) {
     const ataTx = new Transaction().add(...preIxs);
-    const { blockhash } = await connection.getLatestBlockhash('confirmed');
+    const blockhash = await getCachedBlockhash(connection);
     ataTx.recentBlockhash = blockhash;
     ataTx.feePayer = validatorKeypair.publicKey;
     ataTx.sign(validatorKeypair);
@@ -641,12 +686,19 @@ export class ValidatorBot {
     if (!config.apiKey)     throw new Error('apiKey is required');
     if (!PLATFORM_API_URL)  throw new Error('PLATFORM_API_URL is required');
 
-    const rpcUrl = process.env.SOLANA_RPC_URL || 'https://api.devnet.solana.com';
-
-    this.connection = new Connection(rpcUrl, {
-      commitment: 'confirmed',
-      wsEndpoint: rpcUrl.replace('https://', 'wss://').replace('http://', 'ws://'),
-    });
+    if (config.connection) {
+      // ✅ Reuse a shared Connection (and its single websocket) across all
+      // validators in this process instead of opening a new RPC connection
+      // and websocket per validator — this is what was triggering 429s when
+      // running 5 validators concurrently against a rate-limited RPC.
+      this.connection = config.connection;
+    } else {
+      const rpcUrl = process.env.SOLANA_RPC_URL || 'https://api.devnet.solana.com';
+      this.connection = new Connection(rpcUrl, {
+        commitment: 'confirmed',
+        wsEndpoint: rpcUrl.replace('https://', 'wss://').replace('http://', 'ws://'),
+      });
+    }
 
     this.validatorKeypair = Keypair.fromSecretKey(bs58.decode(config.privateKey));
     this.apiKey  = config.apiKey;

@@ -35,7 +35,7 @@ import BN from 'bn.js';
 import { keccak_256 } from '@noble/hashes/sha3';
 import chalk from 'chalk';
 import type { TrustVault } from '../relics/trust_vault.js';
-import { BOT_VERSION, botHeaders } from '../val_bot.js';
+import { BOT_VERSION, botHeaders, getCachedBlockhash } from '../val_bot.js';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ReservationEvent — must include payoutDetails decoded from the on-chain event
@@ -486,7 +486,7 @@ async function submitBuyVoteOnChain(
 
   if (preIxs.length > 0) {
     const ataTx = new Transaction().add(...preIxs);
-    const { blockhash } = await connection.getLatestBlockhash('confirmed');
+    const blockhash = await getCachedBlockhash(connection); // ✅ shared cache, not a fresh RPC call per validator
     ataTx.recentBlockhash = blockhash;
     ataTx.feePayer = validatorKeypair.publicKey;
     ataTx.sign(validatorKeypair);
