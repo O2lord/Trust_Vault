@@ -27,8 +27,9 @@ export async function authenticateValidator(
     .single();
 
   if (error || !data || !data.is_active) {
-    return { valid: false, error: 'Unauthorized' };
-  }
+  console.error('validator auth lookup failed:', error?.message ?? 'no matching row / inactive');
+  return { valid: false, error: 'Unauthorized' };
+}
 
   // ── Version check ─────────────────────────────────────────────────────────
   if (!botVersion) {
