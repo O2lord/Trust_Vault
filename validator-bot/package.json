@@ -5,7 +5,7 @@
   "description": "Validator node for TrustVault — verifies payments and submits on-chain votes",
   "main": "dist/val_bot.js",
   "scripts": {
-    "build": "node scripts/write-version.js && tsc --noEmit",
+    "build": "tsx scripts/write-version.ts && tsc --noEmit",
     "start": "node dist/val_bot.js",
     "start:all": "node dist/run-all.js",
     "dev": "node -e \"require('fs').writeFileSync('version.ts', 'export const BOT_VERSION = \\\"' + require('child_process').execSync('git rev-parse HEAD').toString().trim() + '\\\";')\" && tsx val_bot.ts",
