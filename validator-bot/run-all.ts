@@ -143,7 +143,6 @@ async function main() {
 
   console.log(`\n✅ Environment OK`);
   console.log(`   PLATFORM_API_URL : ${process.env.PLATFORM_API_URL}`);
-  console.log(`   RPC URL          : ${process.env.NEXT_PUBLIC_SOLANA_RPC_URL}`);
   console.log(`   Validators loaded: ${configs.map((c) => c.label).join(', ')}\n`);
 
   // ── Start validators ─────────────────────────────────────────────────────
